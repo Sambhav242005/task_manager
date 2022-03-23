@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background_main"
+    tools:context=".RegistrationActivity">
+
+    <TextView
+        android:textColor="@color/primary"
+        android:gravity="center"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="20"
+        android:shadowColor="@color/black"
+        android:layout_margin="25dp"
+        android:textSize="40dp"
+        android:text="Registration Page"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
+
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="450dp">
+        <TextView
+            android:id="@+id/error_registration"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:layout_margin="10dp"
+            android:id="@+id/registration_username"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"/>
+        <EditText
+            android:layout_margin="10dp"
+            android:id="@+id/registration_email"
+            android:textSize="20dp"
+            android:textAllCaps="false"
+            android:inputType="textEmailAddress"
+            android:hint="Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:layout_margin="10dp"
+            android:id="@+id/registration_password"
+            android:inputType="textPassword"
+            android:textSize="20dp"
+            android:textAllCaps="false"
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:layout_margin="10dp"
+            android:id="@+id/registration_showPassword"
+            android:textSize="20dp"
+            android:text="Show Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="20"
+            android:textColor="@color/primary"
+            android:shadowColor="@color/black"
+            android:background="@color/secondary"
+            android:id="@+id/registration"
+            android:layout_margin="10dp"
+            android:textAllCaps="false"
+            android:textSize="25dp"
+            android:text="Registration"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"/>
+    </LinearLayout>
+</LinearLayout>

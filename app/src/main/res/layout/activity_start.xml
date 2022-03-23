@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="5dp"
+    android:background="@drawable/background_main"
+    tools:context=".StartActivity">
+
+    <TextView
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="Task Manager"
+        android:textSize="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="500dp">
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@color/secondary"
+            android:textColor="@color/primary"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:shadowRadius="8"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowColor="@color/black"
+            android:text="Login"
+            android:textSize="30dp"
+            android:textAllCaps="false"
+            android:id="@+id/start_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@color/secondary"
+            android:textColor="@color/primary"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:shadowRadius="8"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowColor="@color/black"
+            android:textSize="30dp"
+            android:textAllCaps="false"
+            android:id="@+id/start_registration"
+            android:text="Registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>
