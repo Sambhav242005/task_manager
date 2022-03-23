@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/drawable-anydpi/ic_menu.xml" value="0.188" />
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/drawable/background_main.xml" value="0.188" />
+        <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/activity_add_task.xml" value="0.2484375" />
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/activity_login.xml" value="0.2484375" />
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/activity_main.xml" value="0.2484375" />
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/activity_registration.xml" value="0.2484375" />
@@ -13,6 +14,7 @@
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/background_main.xml" value="0.2484375" />
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/main_recycle_task_view.xml" value="0.2484375" />
         <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/menu.xml" value="0.12082066869300911" />
+        <entry key="..\:/Users/ysura/AndroidStudioProjects/TaskManager/app/src/main/res/layout/week_list_layout.xml" value="0.2484375" />
       </map>
     </option>
   </component>

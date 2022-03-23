@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser mUser;
     FirebaseDatabase mData;
     DatabaseReference mRef;
-    Button signOut,mMenuBack;
+    Button signOut,mMenuBack,mAddTask;
     ImageButton btnMenu;
     LinearLayout mMenuLayout,mTopLayout;
-    LinearLayout mCalendarLayout;
+    RelativeLayout mCalendarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         signOut = findViewById(R.id.main_signOut);
         mData = FirebaseDatabase.getInstance();
         mRef = mData.getReference();
+        mAddTask = findViewById(R.id.main_addTask);
         btnMenu = findViewById(R.id.main_btnMenu);
         mMenuLayout = findViewById(R.id.main_menu);
         mMenuBack = findViewById(R.id.main_back);
@@ -68,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
                 mTopLayout.setVisibility(View.VISIBLE);
                 mMenuLayout.setVisibility(View.GONE);
                 mCalendarLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,AddTaskActivity.class));
             }
         });
 
