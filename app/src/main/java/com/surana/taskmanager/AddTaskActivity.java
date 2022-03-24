@@ -3,19 +3,26 @@ package com.surana.taskmanager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -27,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 public class AddTaskActivity extends AppCompatActivity implements DatePickerDialogFragment.DatePickerDialogHandler {
@@ -36,14 +44,14 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
     Button btn_layoutDay,btn_layoutWeek,btn_layoutYearly,mSelectYearly,mAddTaskSubmit,mSelectTime;
     Button mDaySelect;
     ListView mWeekListView;
-    ArrayAdapter<String> weekAdapter;
-    ArrayList<String> weekList ;
+    WeekAdapter weekAdapter;
+    List<WeekItemList> weekList ;
     String select = "day";
     EditText taskEdit;
     private int hours =-1 ,min=-1;
-    int year=2022;
-    int mouth=03;
-    int day=20;
+    int year=0;
+    int mouth=0;
+    int day=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +71,15 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         taskEdit = findViewById(R.id.edit_task);
 
         weekList = new ArrayList<>();
-        weekList.add("Monday");
-        weekList.add("Tuesday");
-        weekList.add("Wednesday");
-        weekList.add("Thursday");
-        weekList.add("Friday");
-        weekList.add("Saturday");
-        weekList.add("Sunday");
+        weekList.add(new WeekItemList("Monday"));
+        weekList.add(new WeekItemList("Tuesday"));
+        weekList.add(new WeekItemList("Wednesday"));
+        weekList.add(new WeekItemList("Thursday"));
+        weekList.add(new WeekItemList("Friday"));
+        weekList.add(new WeekItemList("Saturday"));
+        weekList.add(new WeekItemList("Sunday"));
 
-        weekAdapter = new ArrayAdapter<>(this,R.layout.week_list_layout,
-                weekList);
+        weekAdapter = new WeekAdapter(weekList,this);
 
         mWeekListView.setAdapter(weekAdapter);
 
@@ -130,23 +137,20 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                                year =i;
+                                 year =i;
                                 mouth = i1+1;
                                 day = i2;
+                                mDaySelect.setText(day+" / "+mouth+" / "+year);
                             }
                         },year,mouth-1,day);
                 dpb.show();
             }
         });
-
-        mDaySelect.setText(day+" / "+mouth+" / "+year);
-
         mAddTaskSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hours != -1 && min != -1 &&
-                        !TextUtils.isEmpty(taskEdit.getText()) &&
-                        !TextUtils.isEmpty(select)){
+                        !TextUtils.isEmpty(taskEdit.getText())){
                     AddSubmit();
                 }else {
 
@@ -155,7 +159,29 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
             }
         });
 
+        mWeekListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                String item = weekAdapter.getItem(i).getItemName();
+
+                if (item.contains("Select")){
+                    String alreadyItem = removeWords(item," Select");
+                    weekAdapter.getItem(i).setItemName(alreadyItem);
+                }else{
+                    String check = weekAdapter.getItem(i).getItemName()+" Select";
+                    weekAdapter.getItem(i).setItemName(check);
+                }
+
+
+
+                weekAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
+
     public static String generateToken(int len) {
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rnd = new Random();
@@ -167,6 +193,40 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
     private void AddSubmit() {
         String token = generateToken(15);
+
+
+        switch (select){
+            case "day":
+                day_select(token);
+                break;
+            case "week":
+                week_list(token);
+                break;
+        }
+
+
+
+
+    }
+
+    private void day_select(String token) {
+        if(year > 0 && mouth > 0 ) {
+            Log.d(token, day + "/" + mouth + "/" + year);
+        }
+    }
+
+    private  void week_list(String token){
+        ArrayList<String> selectWeekItem = new ArrayList<>();
+        for (int i = 0;i<weekList.size();i++){
+            String item = weekAdapter.getItem(i).getItemName();
+            if (item.contains(" Select")){
+                selectWeekItem.add(removeWords(item," Select"));
+            }
+        }
+
+        for (int j=0;j<selectWeekItem.size();j++){
+            Log.d(token,selectWeekItem.get(j));
+        }
     }
 
     private void getCurrentDay() {
@@ -177,7 +237,7 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         mouth = Integer.parseInt(dateFormatMouth.format(cal.getTime()));
         SimpleDateFormat dateFormatDay = new SimpleDateFormat("dd");
         day = Integer.parseInt(dateFormatDay.format(cal.getTime()));
-
+     //   mDaySelect.setText(day+" / "+mouth+" / "+year);
     }
 
     @Override
@@ -185,5 +245,9 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         year = yearSelect;
         mouth = monthOfYear;
         day = dayOfMonth;
+    }
+
+    public static String removeWords(String word ,String remove) {
+        return word.replace(remove,"");
     }
 }
