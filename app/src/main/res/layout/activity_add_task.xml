@@ -29,14 +29,6 @@
             android:text="Week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/addTask_yearly"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:textSize="20dp"
-            android:text="Yearly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <ListView
@@ -47,18 +39,10 @@
         android:layout_height="wrap_content"/>
 
 
-
     <androidx.appcompat.widget.AppCompatButton
         android:text="Select Date"
         android:textSize="20dp"
         android:id="@+id/select_dateAddTask"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:visibility="gone"
-        android:text="Select Date"
-        android:id="@+id/select_yearly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

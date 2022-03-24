@@ -28,20 +28,25 @@ import android.widget.Toast;
 
 import com.codetroopers.betterpickers.datepicker.DatePickerBuilder;
 import com.codetroopers.betterpickers.datepicker.DatePickerDialogFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class AddTaskActivity extends AppCompatActivity implements DatePickerDialogFragment.DatePickerDialogHandler {
 
+    FirebaseUser mUsers;
     DatabaseReference mRef;
     FirebaseDatabase mData;
-    Button btn_layoutDay,btn_layoutWeek,btn_layoutYearly,mSelectYearly,mAddTaskSubmit,mSelectTime;
+    Button btn_layoutDay,btn_layoutWeek,mAddTaskSubmit,mSelectTime;
     Button mDaySelect;
     ListView mWeekListView;
     WeekAdapter weekAdapter;
@@ -58,6 +63,7 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
+        mUsers = FirebaseAuth.getInstance().getCurrentUser();
         mData = FirebaseDatabase.getInstance();
         mRef = mData.getReference("day");
         mSelectTime = findViewById(R.id.select_time);
@@ -65,8 +71,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         mWeekListView = findViewById(R.id.list_week);
         btn_layoutDay = findViewById(R.id.addTask_day);
         btn_layoutWeek = findViewById(R.id.addTask_week);
-        btn_layoutYearly = findViewById(R.id.addTask_yearly);
-        mSelectYearly = findViewById(R.id.select_yearly);
         mAddTaskSubmit = findViewById(R.id.addTaskSubmit);
         taskEdit = findViewById(R.id.edit_task);
 
@@ -89,7 +93,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                 select = "day";
                 mDaySelect.setVisibility(View.VISIBLE);
                 mWeekListView.setVisibility(View.GONE);
-                mSelectYearly.setVisibility(View.GONE);
             }
         });
         btn_layoutWeek.setOnClickListener(new View.OnClickListener() {
@@ -97,16 +100,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
             public void onClick(View view) {
                 select = "week";
                 mWeekListView.setVisibility(View.VISIBLE);
-                mDaySelect.setVisibility(View.GONE);
-                mSelectYearly.setVisibility(View.GONE);
-            }
-        });
-        btn_layoutYearly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                select = "yearly";
-                mSelectYearly.setVisibility(View.VISIBLE);
-                mWeekListView.setVisibility(View.GONE);
                 mDaySelect.setVisibility(View.GONE);
             }
         });
@@ -192,15 +185,15 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void AddSubmit() {
-        String token = generateToken(15);
+
 
 
         switch (select){
             case "day":
-                day_select(token);
+                day_select();
                 break;
             case "week":
-                week_list(token);
+                week_list();
                 break;
         }
 
@@ -209,13 +202,14 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
     }
 
-    private void day_select(String token) {
+    private void day_select() {
+        String token = generateToken(15);
         if(year > 0 && mouth > 0 ) {
-            Log.d(token, day + "/" + mouth + "/" + year);
         }
     }
 
-    private  void week_list(String token){
+    private  void week_list(){
+        String token = generateToken(15);
         ArrayList<String> selectWeekItem = new ArrayList<>();
         for (int i = 0;i<weekList.size();i++){
             String item = weekAdapter.getItem(i).getItemName();
@@ -224,8 +218,16 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
             }
         }
 
-        for (int j=0;j<selectWeekItem.size();j++){
-            Log.d(token,selectWeekItem.get(j));
+        if (selectWeekItem.size() >0) {
+            for (int j = 0; j < selectWeekItem.size(); j++) {
+
+                Map<String,String> add = new HashMap<>();
+                add.put("create",mUsers.getUid());
+                add.put("week",selectWeekItem.get(j));
+                add.put("hours", String.valueOf(hours));
+                add.put("min", String.valueOf(min));
+                add.put("task",taskEdit.getText().toString());
+            }
         }
     }
 
