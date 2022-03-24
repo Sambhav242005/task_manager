@@ -113,7 +113,7 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                     public void onTimeSet(TimePicker timePicker, int selectHour, int selectMin) {
                         hours = selectHour;
                         min = selectMin;
-                        mSelectTime.setText(hours+" : "+min);
+                        mSelectTime.setText(String.format("%02d", hours)+" : "+String.format("%02d", min));
                     }
                 };
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddTaskActivity.this,
@@ -211,8 +211,8 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
             add.put("day", String.valueOf(day));
             add.put("mouth", String.valueOf(mouth));
             add.put("year", String.valueOf(year));
-            add.put("hours", String.valueOf(hours));
-            add.put("min", String.valueOf(min));
+            add.put("hours", String.format("%02d", hours));
+            add.put("min", String.format("%02d", min));
             add.put("task",taskEdit.getText().toString());
             mRef.child(select).child(token).setValue(add);
             toMainActivity();
@@ -233,8 +233,8 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                 Map<String,String> add = new HashMap<>();
                 add.put("create",mUsers.getUid());
                 add.put("week",selectWeekItem.get(j));
-                add.put("hours", String.valueOf(hours));
-                add.put("min", String.valueOf(min));
+                add.put("hours", String.format("%02d", hours));
+                add.put("min", String.format("%02d", min));
                 add.put("task",taskEdit.getText().toString());
                 mRef.child(select).child(token).setValue(add);
                 toMainActivity();

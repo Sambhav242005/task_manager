@@ -22,7 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout mMenuLayout,mTopLayout;
     RecyclerView itemTaskRecycle;
     ArrayList<ItemListTask> taskArrayList;
+    int yearSelect,mouthSelect,daySelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,AddTaskActivity.class));
             }
         });
+        getCurrentDay();
         RecycleListAdapter adapter = new RecycleListAdapter(taskArrayList,MainActivity.this);
         itemTaskRecycle.setAdapter(adapter);
         itemTaskRecycle.setLayoutManager(new LinearLayoutManager(this));
@@ -105,8 +109,13 @@ public class MainActivity extends AppCompatActivity {
                         String mouth = dataSnapshot.child("mouth").getValue().toString();
                         String year = dataSnapshot.child("year").getValue().toString();
                         String task = dataSnapshot.child("task").getValue().toString();
-                        taskArrayList.add(new ItemListTask(hours+":"+min+" : ",task,day+"/"+mouth+"/"+year));
-                        adapter.notifyDataSetChanged();
+                       if (year.equals(String.valueOf(yearSelect))
+                               && mouth.equals(String.valueOf(mouthSelect))
+                               && day.equals(String.valueOf(daySelect))){
+                           taskArrayList.add(new ItemListTask(hours+":"+min+" : ",task,
+                                   day+"/"+mouth+"/"+year));
+                           adapter.notifyDataSetChanged();
+                       }
                     }
                 }
             }
@@ -119,9 +128,15 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-
-
-
-
+    private void getCurrentDay() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormatYear = new SimpleDateFormat("yyyy");
+        yearSelect = Integer.parseInt(dateFormatYear.format(cal.getTime()));
+        SimpleDateFormat dateFormatMouth = new SimpleDateFormat("MM");
+        mouthSelect = Integer.parseInt(dateFormatMouth.format(cal.getTime()));
+        SimpleDateFormat dateFormatDay = new SimpleDateFormat("dd");
+        daySelect = Integer.parseInt(dateFormatDay.format(cal.getTime()));
+        //   mDaySelect.setText(day+" / "+mouth+" / "+year);
+    }
 
 }
