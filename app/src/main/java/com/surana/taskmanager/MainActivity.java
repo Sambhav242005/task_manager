@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     Button signOut,mMenuBack,mAddTask;
     ImageButton btnMenu;
     LinearLayout mMenuLayout,mTopLayout;
-    LinearLayout mCalendarLayout;
     RecyclerView itemTaskRecycle;
     ArrayList<ItemListTask> taskArrayList;
 
@@ -71,16 +70,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mMenuLayout.setVisibility(View.VISIBLE);
                 mTopLayout.setVisibility(View.GONE);
-                mCalendarLayout.setVisibility(View.GONE);
+                itemTaskRecycle.setVisibility(View.GONE);
             }
         });
 
         mMenuBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                itemTaskRecycle.setVisibility(View.VISIBLE);
                 mTopLayout.setVisibility(View.VISIBLE);
                 mMenuLayout.setVisibility(View.GONE);
-                mCalendarLayout.setVisibility(View.VISIBLE);
             }
         });
 
@@ -90,19 +89,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,AddTaskActivity.class));
             }
         });
-
-        listAddTask();
-        initRecycle();
-    }
-
-    private void initRecycle() {
         RecycleListAdapter adapter = new RecycleListAdapter(taskArrayList,MainActivity.this);
         itemTaskRecycle.setAdapter(adapter);
         itemTaskRecycle.setLayoutManager(new LinearLayoutManager(this));
-        adapter.notifyDataSetChanged();
-    }
 
-    private void listAddTask() {
         mRef.child("day").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -114,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     String year = dataSnapshot.child("year").getValue().toString();
                     String task = dataSnapshot.child("task").getValue().toString();
                     taskArrayList.add(new ItemListTask(hours+":"+min+" : ",task,day+"/"+mouth+"/"+year));
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -122,5 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        adapter.notifyDataSetChanged();
     }
+
+
+
+
+
+
 }
