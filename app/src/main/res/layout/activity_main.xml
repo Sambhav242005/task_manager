@@ -32,7 +32,9 @@
     </LinearLayout>
     <include android:layout_width="match_parent"
         android:layout_height="wrap_content" layout="@layout/menu"/>
-    <include android:layout_height="match_parent"
-        android:layout_width="match_parent" layout="@layout/main_recycle_task_view"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listTask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
