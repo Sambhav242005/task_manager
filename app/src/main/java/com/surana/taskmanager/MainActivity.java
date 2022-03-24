@@ -2,10 +2,17 @@ package com.surana.taskmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout mMenuLayout,mTopLayout;
     RecyclerView itemTaskRecycle;
     ArrayList<ItemListTask> taskArrayList;
-    int yearSelect,mouthSelect,daySelect;
+    int yearSelect,mouthSelect,daySelect,currentHour,currentMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                        }
                     }
                 }
+
             }
 
             @Override
@@ -126,7 +134,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         adapter.notifyDataSetChanged();
+
     }
+
+
+
+
 
     private void getCurrentDay() {
         Calendar cal = Calendar.getInstance();
