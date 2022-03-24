@@ -96,7 +96,6 @@ public class RegistrationActivity extends AppCompatActivity {
             String username = mUsername.getText().toString();
             String email = mEmail.getText().toString();
             String password = mPassword.getText().toString();
-            String token = generateToken(10);
 
 
             mAuth.createUserWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -109,9 +108,9 @@ public class RegistrationActivity extends AppCompatActivity {
                     hashMap.put("username",username);
                     hashMap.put("email",email);
                     hashMap.put("img_url","url");
-                    hashMap.put("token",token);
+                    hashMap.put("token",authResult.getUser().getUid());
 
-                    mRef.child(token).setValue(hashMap);
+                    mRef.child(authResult.getUser().getUid()).setValue(hashMap);
                     Intent intent = new Intent(RegistrationActivity.this,MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -129,14 +128,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         }
     }
-    public static String generateToken(int len) {
-        String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
-                +"lmnopqrstuvwxyz!@#$%&";
-        Random rnd = new Random();
-        StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++)
-            sb.append(chars.charAt(rnd.nextInt(chars.length())));
-        return sb.toString();
-    }
+
 
 }
