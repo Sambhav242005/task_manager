@@ -32,6 +32,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -109,22 +113,34 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 taskArrayList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String hours = dataSnapshot.child("hours").getValue().toString();
+                    String min = dataSnapshot.child("min").getValue().toString();
+                    String day = dataSnapshot.child("day").getValue().toString();
+                    String mouth = dataSnapshot.child("mouth").getValue().toString();
+                    String year = dataSnapshot.child("year").getValue().toString();
+                    String task = dataSnapshot.child("task").getValue().toString();
+
                     if (dataSnapshot.child("create").getValue().toString().equals(mUser.getUid())){
-                        String hours = dataSnapshot.child("hours").getValue().toString();
-                        String min = dataSnapshot.child("min").getValue().toString();
-                        String day = dataSnapshot.child("day").getValue().toString();
-                        String mouth = dataSnapshot.child("mouth").getValue().toString();
-                        String year = dataSnapshot.child("year").getValue().toString();
-                        String task = dataSnapshot.child("task").getValue().toString();
-                       if (year.equals(String.valueOf(yearSelect))
-                               && mouth.equals(String.valueOf(mouthSelect))
-                               && day.equals(String.valueOf(daySelect))){
-                           taskArrayList.add(new ItemListTask(hours+":"+min+" : ",task,
-                                   day+"/"+mouth+"/"+year));
-                           adapter.notifyDataSetChanged();
-                       }
+                        if (year.equals(String.valueOf(yearSelect))
+                                && mouth.equals(String.valueOf(mouthSelect))
+                                && day.equals(String.valueOf(daySelect))) {
+                            if (getCurrentTimeHour() == Integer.parseInt(hours)
+                                    && getCurrentTimeMin() <= Integer.parseInt(min)) {
+
+                                taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
+                                        day + "/" + mouth + "/" + year));
+                                Collections.reverse(taskArrayList);
+                            }else if (getCurrentTimeHour() < Integer.parseInt(hours)){
+                                taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
+                                        day + "/" + mouth + "/" + year));
+                                Collections.sort(taskArrayList,ItemListTask.Sort);
+                            }
+                        }
                     }
+                    adapter.notifyDataSetChanged();
                 }
+
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -133,12 +149,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
         adapter.notifyDataSetChanged();
 
     }
 
-
-
+    public int getCurrentTimeHour() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("HH");
+        String strDate = mdformat.format(calendar.getTime());
+        return  Integer.parseInt(strDate);
+    }
+    public int getCurrentTimeMin() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("mm");
+        String strDate = mdformat.format(calendar.getTime());
+        return  Integer.parseInt(strDate);
+    }
 
 
     private void getCurrentDay() {

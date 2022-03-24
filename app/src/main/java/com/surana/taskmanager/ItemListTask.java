@@ -1,6 +1,14 @@
 package com.surana.taskmanager;
 
+import java.util.Comparator;
+
 public class ItemListTask {
+    public static Comparator<ItemListTask> Sort = new Comparator<ItemListTask>() {
+        @Override
+        public int compare(ItemListTask I1, ItemListTask I2) {
+            return I1.getTime().compareTo(I2.getTime());
+        }
+    };
     String time;
     String Task;
     String date;

@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -75,9 +76,10 @@ public class YourService extends Service {
                                         String task = dataSnapshot.child("task").getValue().toString();
 
                                         if (day == daySelect && mouth == mouthSelect && year==yearSelect
-                                        && hours.equals(getCurrentTimeHour()) && min.equals(getCurrentTimeMin()) ){
+                                        && hours.equals(getCurrentTimeHour()) && min.equals(getCurrentTimeMin())
+                                                && getCurrentTimeSec() <= 10){
                                             showNotification("Alarm",task);
-                                            Log.d("AppBackGround",min+" "+getCurrentTimeMin());
+
                                         }
 
                                     }
@@ -133,11 +135,11 @@ public class YourService extends Service {
         String strDate = mdformat.format(calendar.getTime());
         return  strDate;
     }
-    public String getCurrentTimeSec() {
+    public int getCurrentTimeSec() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat mdformat = new SimpleDateFormat("ss");
         String strDate = mdformat.format(calendar.getTime());
-        return  strDate;
+        return Integer.parseInt(strDate);
     }
 
     private void getCurrentDay() {
