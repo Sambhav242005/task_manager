@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -65,7 +66,7 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
         mUsers = FirebaseAuth.getInstance().getCurrentUser();
         mData = FirebaseDatabase.getInstance();
-        mRef = mData.getReference("day");
+        mRef = mData.getReference("task");
         mSelectTime = findViewById(R.id.select_time);
         mDaySelect = findViewById(R.id.select_dateAddTask);
         mWeekListView = findViewById(R.id.list_week);
@@ -145,8 +146,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                 if (hours != -1 && min != -1 &&
                         !TextUtils.isEmpty(taskEdit.getText())){
                     AddSubmit();
-                }else {
-
                 }
 
             }
@@ -186,8 +185,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
     private void AddSubmit() {
 
-
-
         switch (select){
             case "day":
                 day_select();
@@ -199,17 +196,30 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
 
 
+    }
 
+    private void toMainActivity(){
+        startActivity(new Intent(AddTaskActivity.this,MainActivity.class));
+        finish();
     }
 
     private void day_select() {
         String token = generateToken(15);
         if(year > 0 && mouth > 0 ) {
+            Map<String,String> add = new HashMap<>();
+            add.put("create",mUsers.getUid());
+            add.put("day", String.valueOf(day));
+            add.put("mouth", String.valueOf(mouth));
+            add.put("year", String.valueOf(year));
+            add.put("hours", String.valueOf(hours));
+            add.put("min", String.valueOf(min));
+            add.put("task",taskEdit.getText().toString());
+            mRef.child(select).child(token).setValue(add);
+            toMainActivity();
         }
     }
 
     private  void week_list(){
-        String token = generateToken(15);
         ArrayList<String> selectWeekItem = new ArrayList<>();
         for (int i = 0;i<weekList.size();i++){
             String item = weekAdapter.getItem(i).getItemName();
@@ -217,16 +227,17 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                 selectWeekItem.add(removeWords(item," Select"));
             }
         }
-
         if (selectWeekItem.size() >0) {
             for (int j = 0; j < selectWeekItem.size(); j++) {
-
+                String token = generateToken(15);
                 Map<String,String> add = new HashMap<>();
                 add.put("create",mUsers.getUid());
                 add.put("week",selectWeekItem.get(j));
                 add.put("hours", String.valueOf(hours));
                 add.put("min", String.valueOf(min));
                 add.put("task",taskEdit.getText().toString());
+                mRef.child(select).child(token).setValue(add);
+                toMainActivity();
             }
         }
     }
