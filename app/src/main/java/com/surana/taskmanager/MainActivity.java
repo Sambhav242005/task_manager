@@ -96,15 +96,18 @@ public class MainActivity extends AppCompatActivity {
         mRef.child("day").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                taskArrayList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    String hours = dataSnapshot.child("hours").getValue().toString();
-                    String min = dataSnapshot.child("min").getValue().toString();
-                    String day = dataSnapshot.child("day").getValue().toString();
-                    String mouth = dataSnapshot.child("mouth").getValue().toString();
-                    String year = dataSnapshot.child("year").getValue().toString();
-                    String task = dataSnapshot.child("task").getValue().toString();
-                    taskArrayList.add(new ItemListTask(hours+":"+min+" : ",task,day+"/"+mouth+"/"+year));
-                    adapter.notifyDataSetChanged();
+                    if (dataSnapshot.child("create").getValue().toString().equals(mUser.getUid())){
+                        String hours = dataSnapshot.child("hours").getValue().toString();
+                        String min = dataSnapshot.child("min").getValue().toString();
+                        String day = dataSnapshot.child("day").getValue().toString();
+                        String mouth = dataSnapshot.child("mouth").getValue().toString();
+                        String year = dataSnapshot.child("year").getValue().toString();
+                        String task = dataSnapshot.child("task").getValue().toString();
+                        taskArrayList.add(new ItemListTask(hours+":"+min+" : ",task,day+"/"+mouth+"/"+year));
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
 
