@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             // Insert custom code here
             getTaskDetail();
-            currentTime.setText(getCurrentTimeHour()+":"+getCurrentTimeMin());
+            currentTime.setText(String.format("%02d", getCurrentTimeHour())+":"+String.format("%02d", getCurrentTimeMin()));
             // Repeat every 2 seconds
             handler.postDelayed(runnable, 2000);
         }
