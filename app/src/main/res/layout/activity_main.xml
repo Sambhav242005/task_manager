@@ -33,6 +33,12 @@
             android:layout_width="75dp"
             android:layout_height="75dp"/>
     </LinearLayout>
+    <TextView
+        android:gravity="center"
+        android:textSize="25dp"
+        android:id="@+id/currentTime_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <include android:layout_width="match_parent"
         android:layout_height="wrap_content" layout="@layout/menu"/>
     <androidx.recyclerview.widget.RecyclerView

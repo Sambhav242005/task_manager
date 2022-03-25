@@ -72,14 +72,13 @@ public class YourService extends Service {
                                         int yearSelect = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
                                         String hours = dataSnapshot.child("hours").getValue().toString();
                                         String min = dataSnapshot.child("min").getValue().toString();
-                                      //  String time = hours+":"+min;
                                         String task = dataSnapshot.child("task").getValue().toString();
 
                                         if (day == daySelect && mouth == mouthSelect && year==yearSelect
-                                        && hours.equals(getCurrentTimeHour()) && min.equals(getCurrentTimeMin())
+                                                && hours.equals(getCurrentTimeHour())
+                                                && min.equals(getCurrentTimeMin())
                                                 && getCurrentTimeSec() <= 10){
                                             showNotification("Alarm",task);
-
                                         }
 
                                     }

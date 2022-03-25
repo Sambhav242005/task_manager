@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -48,13 +49,15 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout mMenuLayout,mTopLayout;
     RecyclerView itemTaskRecycle;
     ArrayList<ItemListTask> taskArrayList;
-    int yearSelect,mouthSelect,daySelect,currentHour,currentMin;
-
+    int yearSelect,mouthSelect,daySelect;
+    private Handler handler = new Handler();
+    TextView currentTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        currentTime = findViewById(R.id.currentTime_main);
         taskArrayList = new ArrayList<>();
         itemTaskRecycle = findViewById(R.id.listTask);
         mAuth = FirebaseAuth.getInstance();
@@ -69,13 +72,15 @@ public class MainActivity extends AppCompatActivity {
         mTopLayout = findViewById(R.id.main_top);
 
         if(mUser == null){
+            handler.removeCallbacks(runnable);
             startActivity(new Intent(MainActivity.this,StartActivity.class));
             finish();
         }
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startActivity(new Intent(MainActivity.this,SignOutActivity.class));
+                handler.removeCallbacks(runnable);
+                startActivity(new Intent(MainActivity.this,SignOutActivity.class));
             }
         });
 
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 mMenuLayout.setVisibility(View.VISIBLE);
                 mTopLayout.setVisibility(View.GONE);
                 itemTaskRecycle.setVisibility(View.GONE);
+                currentTime.setVisibility(View.GONE);
             }
         });
 
@@ -94,20 +100,37 @@ public class MainActivity extends AppCompatActivity {
                 itemTaskRecycle.setVisibility(View.VISIBLE);
                 mTopLayout.setVisibility(View.VISIBLE);
                 mMenuLayout.setVisibility(View.GONE);
+                currentTime.setVisibility(View.VISIBLE);
             }
         });
 
         mAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                handler.removeCallbacks(runnable);
                 startActivity(new Intent(MainActivity.this,AddTaskActivity.class));
             }
         });
         getCurrentDay();
+        getTaskDetail();
+        handler.post(runnable);
+    }
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            // Insert custom code here
+            getTaskDetail();
+            currentTime.setText(getCurrentTimeHour()+":"+getCurrentTimeMin());
+            // Repeat every 2 seconds
+            handler.postDelayed(runnable, 2000);
+        }
+    };
+
+    private void getTaskDetail() {
         RecycleListAdapter adapter = new RecycleListAdapter(taskArrayList,MainActivity.this);
         itemTaskRecycle.setAdapter(adapter);
         itemTaskRecycle.setLayoutManager(new LinearLayoutManager(this));
-
         mRef.child("day").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -149,10 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        adapter.notifyDataSetChanged();
-
     }
+
 
     public int getCurrentTimeHour() {
         Calendar calendar = Calendar.getInstance();
