@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 itemTaskRecycle.setVisibility(View.GONE);
                 currentTime.setVisibility(View.GONE);
                 search_list.setVisibility(View.GONE);
+
             }
         });
 
@@ -180,8 +181,10 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
             if (TextUtils.isEmpty(search_edit.getText())){
-                search_list.setVisibility(View.GONE);
-                itemTaskRecycle.setVisibility(View.VISIBLE);
+                if(mMenuLayout.getVisibility() == View.GONE){
+                    search_list.setVisibility(View.GONE);
+                    itemTaskRecycle.setVisibility(View.VISIBLE);
+                }
             }
 
             getTaskDetail();
