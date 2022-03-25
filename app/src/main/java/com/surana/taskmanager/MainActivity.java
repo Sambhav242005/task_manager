@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             // Insert custom code here
             getTaskDetail();
-            currentTime.setText(String.format("%02d", getCurrentTimeHour())+":"+String.format("%02d", getCurrentTimeMin()));
+            currentTime.setText("Current Time :-"+String.format("%02d", getCurrentTimeHour())+":"+String.format("%02d", getCurrentTimeMin()));
             // Repeat every 2 seconds
             handler.postDelayed(runnable, 2000);
         }
@@ -145,19 +145,10 @@ public class MainActivity extends AppCompatActivity {
 
                     if (dataSnapshot.child("create").getValue().toString().equals(mUser.getUid())){
                         if (year.equals(String.valueOf(yearSelect))
-                                && mouth.equals(String.valueOf(mouthSelect))
-                                && day.equals(String.valueOf(daySelect))) {
-                            if (getCurrentTimeHour() == Integer.parseInt(hours)
-                                    && getCurrentTimeMin() <= Integer.parseInt(min)) {
-
+                                && mouth.equals(String.valueOf(mouthSelect))) {
                                 taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
-                                        day + "/" + mouth + "/" + year));
-                                Collections.reverse(taskArrayList);
-                            }else if (getCurrentTimeHour() < Integer.parseInt(hours)){
-                                taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
-                                        day + "/" + mouth + "/" + year));
-                                Collections.sort(taskArrayList,ItemListTask.Sort);
-                            }
+                                        day + "/" + mouth + "/" + year,"date"));
+                                Collections.sort(taskArrayList ,ItemListTask.Sort);
                         }
                     }
                     adapter.notifyDataSetChanged();

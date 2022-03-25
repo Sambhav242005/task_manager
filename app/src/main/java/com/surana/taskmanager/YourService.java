@@ -65,23 +65,9 @@ public class YourService extends Service {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
 
-                                    String create = dataSnapshot.child("create").getValue().toString();
-                                    if (mUsers != null && create.equals(mUsers.getUid())){
-                                        int daySelect = Integer.parseInt(dataSnapshot.child("day").getValue().toString());
-                                        int mouthSelect = Integer.parseInt(dataSnapshot.child("mouth").getValue().toString());
-                                        int yearSelect = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
-                                        String hours = dataSnapshot.child("hours").getValue().toString();
-                                        String min = dataSnapshot.child("min").getValue().toString();
-                                        String task = dataSnapshot.child("task").getValue().toString();
+                                    getTaskNofication(dataSnapshot);
 
-                                        if (day == daySelect && mouth == mouthSelect && year==yearSelect
-                                                && hours.equals(getCurrentTimeHour())
-                                                && min.equals(getCurrentTimeMin())
-                                                && getCurrentTimeSec() <= 10){
-                                            showNotification("Alarm",task);
-                                        }
-
-                                    }
+                                    removeTask(dataSnapshot);
 
                                 }
                             }
@@ -100,6 +86,57 @@ public class YourService extends Service {
 
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void removeTask(DataSnapshot dataSnapshot) {
+
+        int daySelect = Integer.parseInt(dataSnapshot.child("day").getValue().toString());
+        int mouthSelect = Integer.parseInt(dataSnapshot.child("mouth").getValue().toString());
+        int yearSelect = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
+        int hours = Integer.parseInt(dataSnapshot.child("hours").getValue().toString());
+        int min = Integer.parseInt(dataSnapshot.child("min").getValue().toString());
+        String key = dataSnapshot.getKey();
+
+        if (yearSelect == year){
+
+            if (mouthSelect == mouth ){
+                if (daySelect < day) {
+                    mRef.child(key).removeValue();
+                }else if (daySelect == day){
+                    if (hours < Integer.parseInt(getCurrentTimeHour())){
+                        mRef.child(key).removeValue();
+                    }else if (hours == Integer.parseInt(getCurrentTimeHour())
+                            && min < Integer.parseInt(getCurrentTimeMin())){
+                        mRef.child(key).removeValue();
+                    }
+                }
+            }else if (mouthSelect < mouth){
+                mRef.child(key).removeValue();
+            }
+
+        }else if (yearSelect < year){
+            mRef.child(key).removeValue();
+        }
+    }
+
+    private void getTaskNofication(DataSnapshot dataSnapshot) {
+        String create = dataSnapshot.child("create").getValue().toString();
+        if (mUsers != null && create.equals(mUsers.getUid())){
+            int daySelect = Integer.parseInt(dataSnapshot.child("day").getValue().toString());
+            int mouthSelect = Integer.parseInt(dataSnapshot.child("mouth").getValue().toString());
+            int yearSelect = Integer.parseInt(dataSnapshot.child("year").getValue().toString());
+            String hours = dataSnapshot.child("hours").getValue().toString();
+            String min = dataSnapshot.child("min").getValue().toString();
+            String task = dataSnapshot.child("task").getValue().toString();
+
+            if (day == daySelect && mouth == mouthSelect && year==yearSelect
+                    && hours.equals(getCurrentTimeHour())
+                    && min.equals(getCurrentTimeMin())
+                    && getCurrentTimeSec() <= 10){
+                showNotification("Alarm",task);
+            }
+
+        }
     }
 
     private void showNotification(String title, String message) {

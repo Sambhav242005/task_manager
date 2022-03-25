@@ -4,19 +4,38 @@ import java.util.Comparator;
 
 public class ItemListTask {
     public static Comparator<ItemListTask> Sort = new Comparator<ItemListTask>() {
+
+
         @Override
-        public int compare(ItemListTask I1, ItemListTask I2) {
-            return I1.getTime().compareTo(I2.getTime());
+        public int compare(ItemListTask one, ItemListTask another) {
+
+            int comparetionOfDate = one.getDate().compareTo(another.getDate());
+
+            if (comparetionOfDate == 0) {
+                return one.getTime().compareTo(another.getTime());
+            }else {
+                return  comparetionOfDate;
+            }
         }
     };
     String time;
     String Task;
     String date;
+    String type;
 
-    public ItemListTask(String time, String task, String date) {
+    public ItemListTask(String time, String task, String date, String type) {
         this.time = time;
         Task = task;
         this.date = date;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTime() {
