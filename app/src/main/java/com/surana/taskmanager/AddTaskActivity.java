@@ -66,7 +66,7 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
         mUsers = FirebaseAuth.getInstance().getCurrentUser();
         mData = FirebaseDatabase.getInstance();
-        mRef = mData.getReference("task");
+        mRef = mData.getReference("task").child(mUsers.getUid());
         mSelectTime = findViewById(R.id.select_time);
         mDaySelect = findViewById(R.id.select_dateAddTask);
         mWeekListView = findViewById(R.id.list_week);

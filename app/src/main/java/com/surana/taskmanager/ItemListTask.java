@@ -21,21 +21,11 @@ public class ItemListTask {
     String time;
     String Task;
     String date;
-    String type;
 
-    public ItemListTask(String time, String task, String date, String type) {
+    public ItemListTask(String time, String task, String date) {
         this.time = time;
         Task = task;
         this.date = date;
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getTime() {

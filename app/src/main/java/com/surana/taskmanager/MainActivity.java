@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         signOut = findViewById(R.id.main_signOut);
         mData = FirebaseDatabase.getInstance();
-        mRef = mData.getReference("task");
+        mRef = mData.getReference("task").child(mUser.getUid());
         mAddTask = findViewById(R.id.main_addTask);
         btnMenu = findViewById(R.id.main_btnMenu);
         mMenuLayout = findViewById(R.id.main_menu);
@@ -104,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         mAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         getTaskDetail();
         handler.post(runnable);
     }
+
+
 
     private Runnable runnable = new Runnable() {
         @Override
@@ -147,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                         if (year.equals(String.valueOf(yearSelect))
                                 && mouth.equals(String.valueOf(mouthSelect))) {
                                 taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
-                                        day + "/" + mouth + "/" + year,"date"));
+                                        day + "/" + mouth + "/" + year));
                                 Collections.sort(taskArrayList ,ItemListTask.Sort);
                         }
                     }
@@ -163,7 +168,71 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Calendar calendar = Calendar.getInstance();
+        int dayWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        String todayWeekend = " ";
+
+        switch (dayWeek) {
+            case Calendar.SUNDAY:
+                todayWeekend = "Sunday";
+                break;
+            case Calendar.MONDAY:
+                todayWeekend = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                todayWeekend = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                todayWeekend = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                todayWeekend = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                todayWeekend = "Friday";
+                break;
+            case Calendar.SATURDAY:
+                todayWeekend = "Saturday";
+                break;
+        }
+
+
+        String finalTodayWeekend = todayWeekend;
+        mRef.child("week").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String week = dataSnapshot.child("week").getValue().toString();
+                    if (dataSnapshot.child("create").getValue().toString().equals(mUser.getUid())
+                            && week.equals(finalTodayWeekend)){
+                        String hours = dataSnapshot.child("hours").getValue().toString();
+                        String min = dataSnapshot.child("min").getValue().toString();
+                        String task = dataSnapshot.child("task").getValue().toString();
+                        if (getCurrentTimeHour() == Integer.parseInt(hours)
+                                && getCurrentTimeMin() <= Integer.parseInt(min)){
+                            taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
+                                    daySelect + "/" + mouthSelect + "/" + yearSelect));
+                            Collections.sort(taskArrayList ,ItemListTask.Sort);
+                        }else if (getCurrentTimeHour() < Integer.parseInt(hours)){
+                            taskArrayList.add(new ItemListTask(hours + ":" + min + " : ", task,
+                                    daySelect + "/" + mouthSelect + "/" + yearSelect));
+                            Collections.sort(taskArrayList ,ItemListTask.Sort);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
+
 
 
     public int getCurrentTimeHour() {

@@ -50,7 +50,7 @@ public class YourService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mUsers = FirebaseAuth.getInstance().getCurrentUser();
-        mRef = FirebaseDatabase.getInstance().getReference("task").child("day");
+        mRef = FirebaseDatabase.getInstance().getReference("task").child(mUsers.getUid());
 
         timer.scheduleAtFixedRate(
                 new TimerTask() {
@@ -58,9 +58,7 @@ public class YourService extends Service {
 
 
                         getCurrentDay();
-
-
-                        mRef.addValueEventListener(new ValueEventListener() {
+                        mRef.child("day").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -77,6 +75,17 @@ public class YourService extends Service {
 
                             }
                         });
+                        mRef.child("week").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                getWeekTask();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                     }
                 },
@@ -86,6 +95,63 @@ public class YourService extends Service {
 
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void getWeekTask() {
+        Calendar calendar = Calendar.getInstance();
+        int dayWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        String todayWeekend = " ";
+
+        switch (dayWeek) {
+            case Calendar.SUNDAY:
+                todayWeekend = "Sunday";
+                break;
+            case Calendar.MONDAY:
+                todayWeekend = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                todayWeekend = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                todayWeekend = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                todayWeekend = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                todayWeekend = "Friday";
+                break;
+            case Calendar.SATURDAY:
+                todayWeekend = "Saturday";
+                break;
+        }
+
+
+        String finalTodayWeekend = todayWeekend;
+        mRef.child("week").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String week = dataSnapshot.child("week").getValue().toString();
+                    if (dataSnapshot.child("create").getValue().toString().equals(mUsers.getUid())
+                            && week.equals(finalTodayWeekend)){
+                        String hours = dataSnapshot.child("hours").getValue().toString();
+                        String min = dataSnapshot.child("min").getValue().toString();
+                        String task = dataSnapshot.child("task").getValue().toString();
+                        if (hours.equals(getCurrentTimeHour()) && min.equals(getCurrentTimeMin())
+                                && getCurrentTimeSec() <= 15) {
+                            showNotification("Alarm",task);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void removeTask(DataSnapshot dataSnapshot) {
