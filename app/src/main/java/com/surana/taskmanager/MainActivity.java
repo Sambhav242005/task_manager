@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser mUser;
     FirebaseDatabase mData;
     DatabaseReference mRef;
-    Button signOut,mMenuBack,mAddTask;
+    Button signOut,mMenuBack,mAddTask,mViewWeek;
     ImageButton btnMenu;
     LinearLayout mMenuLayout,mTopLayout;
     RecyclerView itemTaskRecycle;
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mViewWeek = findViewById(R.id.main_viewWeekend);
         currentTime = findViewById(R.id.currentTime_main);
         taskArrayList = new ArrayList<>();
         itemTaskRecycle = findViewById(R.id.listTask);
@@ -82,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 handler.removeCallbacks(runnable);
                 startActivity(new Intent(MainActivity.this,SignOutActivity.class));
+            }
+        });
+
+        mViewWeek.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,ViewWeekendActivity.class));
             }
         });
 
@@ -126,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             // Insert custom code here
             getTaskDetail();
-            currentTime.setText("Current Time :-"+String.format("%02d", getCurrentTimeHour())+":"+String.format("%02d", getCurrentTimeMin()));
+            currentTime.setText("Current Time :-  "+String.format("%02d", getCurrentTimeHour())+":"+String.format("%02d", getCurrentTimeMin()));
             // Repeat every 2 seconds
             handler.postDelayed(runnable, 2000);
         }

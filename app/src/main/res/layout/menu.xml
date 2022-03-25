@@ -26,6 +26,21 @@
         <androidx.appcompat.widget.AppCompatButton
             android:textAllCaps="false"
             android:background="@color/secondary"
+            android:id="@+id/main_viewWeekend"
+            android:padding="15dp"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="10"
+            android:shadowColor="@color/black"
+            android:textColor="@color/primary"
+            android:layout_margin="10dp"
+            android:textSize="23dp"
+            android:text="View Weekend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:textAllCaps="false"
+            android:background="@color/secondary"
             android:id="@+id/main_signOut"
             android:padding="15dp"
             android:shadowDx="5"
