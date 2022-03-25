@@ -46,12 +46,13 @@ public class ViewWeekendActivity extends AppCompatActivity {
 
         addWeekTaskList();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mRef.child(arrayListKey.get(i)).removeValue();
-                arrayListKey.remove(i);
-                addWeekTaskList();
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+               mRef.child(arrayListKey.get(i)).removeValue();
+               arrayListKey.remove(i);
+               addWeekTaskList();
+                return false;
             }
         });
 

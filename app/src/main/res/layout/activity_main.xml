@@ -41,6 +41,10 @@
         android:layout_height="wrap_content"/>
     <include android:layout_width="match_parent"
         android:layout_height="wrap_content" layout="@layout/menu"/>
+    <ListView
+        android:id="@+id/search_mainEditText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listTask"
         android:layout_width="match_parent"

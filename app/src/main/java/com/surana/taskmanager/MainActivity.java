@@ -15,11 +15,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,11 +59,16 @@ public class MainActivity extends AppCompatActivity {
     int yearSelect,mouthSelect,daySelect;
     private Handler handler = new Handler();
     TextView currentTime;
+    EditText search_edit;
+    ListView search_list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        search_list = findViewById(R.id.search_mainEditText);
+        search_edit = findViewById(R.id.main_searchTask);
         mViewWeek = findViewById(R.id.main_viewWeekend);
         currentTime = findViewById(R.id.currentTime_main);
         taskArrayList = new ArrayList<>();
@@ -72,6 +83,25 @@ public class MainActivity extends AppCompatActivity {
         mMenuLayout = findViewById(R.id.main_menu);
         mMenuBack = findViewById(R.id.main_back);
         mTopLayout = findViewById(R.id.main_top);
+
+        search_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                itemTaskRecycle.setVisibility(View.GONE);
+                search_list.setVisibility(View.VISIBLE);
+                filter(editable.toString());
+            }
+        });
 
         if(mUser == null){
             handler.removeCallbacks(runnable);
@@ -100,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 mTopLayout.setVisibility(View.GONE);
                 itemTaskRecycle.setVisibility(View.GONE);
                 currentTime.setVisibility(View.GONE);
+                search_list.setVisibility(View.GONE);
             }
         });
 
@@ -127,12 +158,32 @@ public class MainActivity extends AppCompatActivity {
         handler.post(runnable);
     }
 
+    private void filter(String s) {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.week_list_layout,
+                stringArrayList);
+
+        for (ItemListTask itemListTask : taskArrayList){
+            if (itemListTask.getTask().toLowerCase().contains(s.toLowerCase())){
+                stringArrayList.add(itemListTask.getDate()+" :- "+
+                        itemListTask.getTime()+" - "+itemListTask.getTask());
+            }
+            adapter.notifyDataSetChanged();
+        }
+        search_list.setAdapter(adapter);
+
+    }
 
 
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            // Insert custom code here
+
+            if (TextUtils.isEmpty(search_edit.getText())){
+                search_list.setVisibility(View.GONE);
+                itemTaskRecycle.setVisibility(View.VISIBLE);
+            }
+
             getTaskDetail();
             currentTime.setText("Current Time :-  "+String.format("%02d", getCurrentTimeHour())+":"+String.format("%02d", getCurrentTimeMin()));
             // Repeat every 2 seconds
