@@ -14,14 +14,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.appcompat.widget.AppCompatButton
+            android:background="@color/secondary"
+            android:textAllCaps="false"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="10"
+            android:shadowColor="@color/black"
+            android:textColor="@color/primary"
             android:id="@+id/addTask_day"
             android:gravity="center"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:textSize="20dp"
             android:text="Day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatButton
+            android:layout_margin="5dp"
+            android:background="@color/secondary"
+            android:textAllCaps="false"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="10"
+            android:shadowColor="@color/black"
+            android:textColor="@color/primary"
             android:id="@+id/addTask_week"
             android:gravity="center"
             android:layout_weight="1"
@@ -40,6 +56,14 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
+        android:layout_margin="5dp"
+        android:background="@color/secondary"
+        android:textAllCaps="false"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="10"
+        android:shadowColor="@color/black"
+        android:textColor="@color/primary"
         android:text="Select Date"
         android:textSize="20dp"
         android:id="@+id/select_dateAddTask"
@@ -47,10 +71,18 @@
         android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:layout_margin="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.appcompat.widget.AppCompatButton
+            android:background="@color/secondary"
+            android:textAllCaps="false"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="10"
+            android:shadowColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="20dp"
             android:id="@+id/select_time"
             android:text="Select Time"
@@ -64,6 +96,13 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"/>
         <androidx.appcompat.widget.AppCompatButton
+            android:background="@color/secondary"
+            android:textAllCaps="false"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="10"
+            android:shadowColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="20dp"
             android:id="@+id/addTaskSubmit"
             android:text="Add Task"
