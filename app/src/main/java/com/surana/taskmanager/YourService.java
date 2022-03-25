@@ -132,7 +132,7 @@ public class YourService extends Service {
             if (day == daySelect && mouth == mouthSelect && year==yearSelect
                     && hours.equals(getCurrentTimeHour())
                     && min.equals(getCurrentTimeMin())
-                    && getCurrentTimeSec() <= 10){
+                    && getCurrentTimeSec() <= 15){
                 showNotification("Alarm",task);
             }
 
