@@ -167,21 +167,21 @@ public class YourService extends Service {
 
             if (mouthSelect == mouth ){
                 if (daySelect < day) {
-                    mRef.child(key).removeValue();
+                    mRef.child("day").child(key).removeValue();
                 }else if (daySelect == day){
                     if (hours < Integer.parseInt(getCurrentTimeHour())){
-                        mRef.child(key).removeValue();
+                        mRef.child("day").child(key).removeValue();
                     }else if (hours == Integer.parseInt(getCurrentTimeHour())
                             && min < Integer.parseInt(getCurrentTimeMin())){
-                        mRef.child(key).removeValue();
+                        mRef.child("day").child(key).removeValue();
                     }
                 }
             }else if (mouthSelect < mouth){
-                mRef.child(key).removeValue();
+                mRef.child("day").child(key).removeValue();
             }
 
         }else if (yearSelect < year){
-            mRef.child(key).removeValue();
+            mRef.child("day").child(key).removeValue();
         }
     }
 
