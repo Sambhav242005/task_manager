@@ -1,12 +1,17 @@
 package com.surana.taskmanager;
 
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -32,7 +37,7 @@ public class YourService extends Service {
 
 
     private static final long UPDATE_INTERVAL = 2000;
-    private static final long DELAY_INTERVAL = 2000;
+    private static final long DELAY_INTERVAL = 100;
 
     DatabaseReference mRef;
     FirebaseUser mUsers;
@@ -138,8 +143,9 @@ public class YourService extends Service {
                         String hours = dataSnapshot.child("hours").getValue().toString();
                         String min = dataSnapshot.child("min").getValue().toString();
                         String task = dataSnapshot.child("task").getValue().toString();
-                        if (hours.equals(getCurrentTimeHour()) && min.equals(getCurrentTimeMin())
-                                && getCurrentTimeSec() <= 15) {
+                        if (hours.equals(getCurrentTimeHour())
+                                && min.equals(getCurrentTimeMin())
+                                && getCurrentTimeSec() <= 20) {
                             showNotification("Alarm",task);
                         }
                     }
@@ -198,7 +204,7 @@ public class YourService extends Service {
             if (day == daySelect && mouth == mouthSelect && year==yearSelect
                     && hours.equals(getCurrentTimeHour())
                     && min.equals(getCurrentTimeMin())
-                    && getCurrentTimeSec() <= 15){
+                    && getCurrentTimeSec() <= 20){
                 showNotification("Alarm",task);
             }
 
@@ -213,15 +219,25 @@ public class YourService extends Service {
                     "YOUR_CHANNEL_NAME",
                     NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription("Alarm");
+            channel.enableLights(true);
+            channel.setLightColor(Color.GRAY);
             mNotificationManager.createNotificationChannel(channel);
         }
+        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "YOUR_CHANNEL_ID")
                 .setSmallIcon(R.mipmap.ic_app_round) // notification icon
                 .setContentTitle(title) // title for notification
                 .setContentText(message)// message for notification
-                .setAutoCancel(true); // clear notification after click
+                .setAutoCancel(true)
+                .setSound(uri)
+                .setVibrate(new long[]{100, 500, 1000})
+                .setDefaults(Notification.DEFAULT_LIGHTS ); // clear notification after click
         Intent intent = new Intent(getApplicationContext(), YourService.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setLights(0xFFb71c1c, 1000, 2000);
+      //  mBuilder.setSound(yourSoundUri);
         mBuilder.setContentIntent(pi);
         mNotificationManager.notify(0, mBuilder.build());
     }
