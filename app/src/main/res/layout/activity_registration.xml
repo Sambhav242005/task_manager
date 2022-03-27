@@ -62,26 +62,29 @@
             android:hint="Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
         <CheckBox
-            android:layout_margin="10dp"
             android:id="@+id/registration_showPassword"
-            android:textSize="20dp"
-            android:text="Show Password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:minHeight="48dp"
+            android:text="Show Password"
+            android:textSize="20dp" />
+
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/registration"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:background="@color/secondary"
+            android:shadowColor="@color/black"
             android:shadowDx="5"
             android:shadowDy="5"
             android:shadowRadius="20"
-            android:textColor="@color/primary"
-            android:shadowColor="@color/black"
-            android:background="@color/secondary"
-            android:id="@+id/registration"
-            android:layout_margin="10dp"
-            android:textAllCaps="false"
-            android:textSize="25dp"
             android:text="Registration"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"/>
+            android:textAllCaps="false"
+            android:textColor="#BCAAA4"
+            android:textSize="25dp" />
     </LinearLayout>
 </LinearLayout>
